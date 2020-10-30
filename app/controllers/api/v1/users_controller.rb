@@ -14,6 +14,16 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+      def destroy
+        user = User.find(id = params[:id])
+
+        if user.destroy
+          head :no_content
+        else
+          render json: {error: user.errors.messages}, status: 422
+        end
+      end
+
   private
 
   def user_params
