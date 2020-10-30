@@ -1,5 +1,7 @@
 class Api::V1::UsersController < ApplicationController
       skip_before_action :verify_authenticity_token
+
+ before_action :set_headers
   def index
     users = User.all
     render json: users
@@ -14,15 +16,22 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-      def destroy
-        user = User.find(id = params[:id])
+    def destroy
+      user = User.find(id = params[:id])
 
-        if user.destroy
-          head :no_content
-        else
-          render json: {error: user.errors.messages}, status: 422
-        end
+      if user.destroy
+        head :no_content
+      else
+        render json: {error: user.errors.messages}, status: 422
       end
+    end
+
+
+  protected
+
+  def set_headers
+    response.headers['Access-Control-Allow-Origin'] = '*'
+  end
 
   private
 
